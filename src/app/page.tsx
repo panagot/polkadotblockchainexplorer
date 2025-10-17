@@ -56,18 +56,20 @@ export default function Home() {
       const savedDarkMode = localStorage.getItem('polkadot-dark-mode');
       const isDark = savedDarkMode === 'true';
       
-      // Apply dark class to html element immediately
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-        document.body.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.body.classList.remove('dark');
-      }
-      
-      // Set state after DOM manipulation
+      // Set state first
       setDarkMode(isDark);
       setMounted(true);
+      
+      // Apply dark class after state is set
+      setTimeout(() => {
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+          document.body.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.body.classList.remove('dark');
+        }
+      }, 0);
     }
   }, []);
 
@@ -180,6 +182,29 @@ export default function Home() {
       default: return 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-300';
     }
   };
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-100 flex flex-col">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg mx-auto mb-4">
+              <Image 
+                src="/polkadot-logo.png"
+                alt="Polkadot Logo"
+                width={40}
+                height={40}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900 mb-2">Polkadot Explorer</h1>
+            <p className="text-slate-600">Loading...</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex flex-col">
