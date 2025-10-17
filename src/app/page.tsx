@@ -139,10 +139,10 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center justify-center">
-                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
                   <svg 
-                    width="20" 
-                    height="20" 
+                    width="24" 
+                    height="24" 
                     viewBox="0 0 24 24" 
                     fill="none" 
                     className="text-white"
@@ -163,27 +163,31 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowHistory(!showHistory)}
-                className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                className="p-3 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all duration-200 border border-slate-200/50 dark:border-slate-700/50 hover:shadow-md"
                 title="Transaction History"
               >
-                <History className="w-5 h-5" />
+                <History className="w-5 h-5 text-slate-600 dark:text-slate-400" />
               </button>
               <button
                 onClick={() => setShowDashboard(!showDashboard)}
-                className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                className="p-3 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all duration-200 border border-slate-200/50 dark:border-slate-700/50 hover:shadow-md"
                 title="Network Dashboard"
               >
-                <TrendingUp className="w-5 h-5" />
+                <TrendingUp className="w-5 h-5 text-slate-600 dark:text-slate-400" />
               </button>
               <button
                 onClick={toggleDarkMode}
-                className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                className="p-3 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all duration-200 border border-slate-200/50 dark:border-slate-700/50 hover:shadow-md"
                 title="Toggle Dark Mode"
               >
-                {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                {darkMode ? (
+                  <Sun className="w-5 h-5 text-amber-500" />
+                ) : (
+                  <Moon className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                )}
               </button>
             </div>
           </div>
@@ -192,6 +196,65 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="flex-1 max-w-7xl mx-auto px-6 py-12 w-full">
+        
+        {/* History Panel */}
+        {showHistory && (
+          <div className="mb-8 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-slate-200/50 dark:border-slate-700/50">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                <History className="w-6 h-6 text-blue-500" />
+                Transaction History
+              </h3>
+              <button
+                onClick={() => setShowHistory(false)}
+                className="p-2 hover:bg-slate-200/80 dark:hover:bg-slate-600/80 rounded-lg transition-colors"
+              >
+                <XCircle className="w-5 h-5 text-slate-500" />
+              </button>
+            </div>
+            <div className="text-center py-8">
+              <History className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+              <p className="text-slate-600 dark:text-slate-400">
+                No transaction history yet. Analyze some transactions to see them here!
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Dashboard Panel */}
+        {showDashboard && (
+          <div className="mb-8 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-slate-200/50 dark:border-slate-700/50">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                <TrendingUp className="w-6 h-6 text-green-500" />
+                Polkadot Network Dashboard
+              </h3>
+              <button
+                onClick={() => setShowDashboard(false)}
+                className="p-2 hover:bg-slate-200/80 dark:hover:bg-slate-600/80 rounded-lg transition-colors"
+              >
+                <XCircle className="w-5 h-5 text-slate-500" />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-6 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
+                <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Network Status</h4>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">Online</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">All systems operational</p>
+              </div>
+              <div className="p-6 bg-gradient-to-br from-green-50/80 to-emerald-50/80 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border border-green-200/50 dark:border-green-800/50">
+                <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Active Validators</h4>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">297</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Securing the network</p>
+              </div>
+              <div className="p-6 bg-gradient-to-br from-purple-50/80 to-pink-50/80 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl border border-purple-200/50 dark:border-purple-800/50">
+                <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Parachains</h4>
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">50+</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Connected chains</p>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
             Explore Polkadot Transactions
