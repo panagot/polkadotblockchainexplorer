@@ -41,7 +41,6 @@ export default function Home() {
   const [copied, setCopied] = useState<string | null>(null);
 
   useEffect(() => {
-    setMounted(true);
     // Check if we're in the browser
     if (typeof window !== 'undefined') {
       const savedHistory = localStorage.getItem('polkadot-tx-history');
@@ -56,14 +55,17 @@ export default function Home() {
       // Initialize dark mode from localStorage
       const savedDarkMode = localStorage.getItem('polkadot-dark-mode');
       const isDark = savedDarkMode === 'true';
-      setDarkMode(isDark);
       
-      // Apply dark class to html element
+      // Apply dark class to html element immediately
       if (isDark) {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
       }
+      
+      // Set state after DOM manipulation
+      setDarkMode(isDark);
+      setMounted(true);
     }
   }, []);
 
@@ -81,7 +83,10 @@ export default function Home() {
   }, [darkMode, mounted]);
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    console.log('Toggle clicked! Current darkMode:', darkMode);
+    const newDarkMode = !darkMode;
+    console.log('Setting darkMode to:', newDarkMode);
+    setDarkMode(newDarkMode);
   };
 
   const copyToClipboard = async (text: string, type: string) => {
@@ -162,7 +167,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex flex-col">
-      {/* Build: 2024-01-17-POLKADOT */}
+      {/* Build: 2025-01-17-POLKADOT */}
       {/* Header */}
       <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -667,7 +672,7 @@ export default function Home() {
                 Made with ❤️ for the Polkadot community
               </p>
               <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-500">
-                <span>© 2024 Polkadot Explorer</span>
+                <span>© 2025 Polkadot Explorer</span>
                 <span>•</span>
                 <span>Grant Submission</span>
                 <span>•</span>
