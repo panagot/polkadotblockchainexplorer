@@ -90,6 +90,18 @@ export default function Home() {
     console.log('Toggle clicked! Current darkMode:', darkMode);
     const newDarkMode = !darkMode;
     console.log('Setting darkMode to:', newDarkMode);
+    
+    // Apply changes immediately
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
+      localStorage.setItem('polkadot-dark-mode', 'true');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+      localStorage.setItem('polkadot-dark-mode', 'false');
+    }
+    
     setDarkMode(newDarkMode);
   };
 
@@ -172,6 +184,10 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex flex-col">
       {/* Build: 2025-01-17-POLKADOT */}
+      {/* Debug: Dark Mode Status */}
+      <div className="fixed top-0 right-0 z-50 p-2 bg-red-500 text-white text-xs">
+        Dark Mode: {darkMode ? 'ON' : 'OFF'} | Mounted: {mounted ? 'YES' : 'NO'}
+      </div>
       {/* Header */}
       <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -216,9 +232,9 @@ export default function Home() {
               <button
                 onClick={toggleDarkMode}
                 className="p-3 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all duration-200 border border-slate-200/50 dark:border-slate-700/50 hover:shadow-md"
-                title="Toggle Dark Mode"
+                title={`Toggle Dark Mode (Current: ${darkMode ? 'Dark' : 'Light'})`}
               >
-                {mounted && darkMode ? (
+                {darkMode ? (
                   <Sun className="w-5 h-5 text-amber-500" />
                 ) : (
                   <Moon className="w-5 h-5 text-slate-600 dark:text-slate-400" />
