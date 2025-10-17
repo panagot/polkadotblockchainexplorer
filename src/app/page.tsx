@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Search, Loader2, Moon, Sun, History, TrendingUp, Copy, Download, Share2, ExternalLink, XCircle, Check } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Home() {
   const [hash, setHash] = useState('');
@@ -12,9 +13,11 @@ export default function Home() {
   const [showHistory, setShowHistory] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
 
   useEffect(() => {
+    setMounted(true);
     // Check if we're in the browser
     if (typeof window !== 'undefined') {
       const savedHistory = localStorage.getItem('polkadot-tx-history');
@@ -38,8 +41,8 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Check if we're in the browser
-    if (typeof window !== 'undefined') {
+    // Check if we're in the browser and component is mounted
+    if (typeof window !== 'undefined' && mounted) {
       if (darkMode) {
         document.documentElement.classList.add('dark');
         localStorage.setItem('polkadot-dark-mode', 'true');
@@ -48,7 +51,7 @@ export default function Home() {
         localStorage.setItem('polkadot-dark-mode', 'false');
       }
     }
-  }, [darkMode]);
+  }, [darkMode, mounted]);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -139,18 +142,14 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center justify-center">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <svg 
-                    width="24" 
-                    height="24" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    className="text-white"
-                  >
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                    <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2"/>
-                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
-                  </svg>
+                <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg">
+        <Image
+                    src="/polkadot-logo.png"
+                    alt="Polkadot Logo"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
               <div>
@@ -183,7 +182,7 @@ export default function Home() {
                 className="p-3 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all duration-200 border border-slate-200/50 dark:border-slate-700/50 hover:shadow-md"
                 title="Toggle Dark Mode"
               >
-                {darkMode ? (
+                {mounted && darkMode ? (
                   <Sun className="w-5 h-5 text-amber-500" />
                 ) : (
                   <Moon className="w-5 h-5 text-slate-600 dark:text-slate-400" />
