@@ -149,7 +149,7 @@ export default function Home() {
                   >
                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
                     <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2"/>
-                    <circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="2"/>
+                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
                   </svg>
                 </div>
               </div>
@@ -247,8 +247,8 @@ export default function Home() {
                 <strong>Pro tip:</strong> Copy any transaction hash from{' '}
                 <a 
                   href="https://polkadot.subscan.io/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
                   className="underline hover:no-underline"
                 >
                   Subscan
@@ -256,12 +256,12 @@ export default function Home() {
                 or{' '}
                 <a 
                   href="https://polkadot.statescan.io/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
                   className="underline hover:no-underline"
-                >
+          >
                   Statescan
-                </a>
+          </a>
               </div>
             </div>
           </div>
@@ -282,114 +282,253 @@ export default function Home() {
         {/* Transaction Analysis */}
         {transaction && (
           <div className="max-w-6xl mx-auto space-y-8">
-            {/* Transaction Header */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className={`px-3 py-1 rounded-full text-sm font-medium ${getTransactionTypeColor(transaction.type)}`}>
-                    {transaction.type}
-                  </div>
-                  <div className="text-sm text-slate-600 dark:text-slate-400">
-                    Block #{transaction.blockNumber}
-                  </div>
+            {/* Summary Card */}
+            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-slate-200/50 dark:border-slate-700/50">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Check className="w-5 h-5 text-white" />
                 </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => copyToClipboard(transaction.hash, 'hash')}
-                    className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-                    title="Copy Hash"
-                  >
-                    {copied === 'hash' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  </button>
-                  <button
-                    onClick={() => copyToClipboard(transaction.from, 'from')}
-                    className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-                    title="Copy From"
-                  >
-                    {copied === 'from' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  </button>
-                  <button className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Export JSON">
-                    <Download className="w-4 h-4" />
-                  </button>
-                  <button className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Share">
-                    <Share2 className="w-4 h-4" />
-                  </button>
-                  <a
-                    href={`https://polkadot.subscan.io/extrinsic/${transaction.hash}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-                    title="View on Subscan"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    Transaction Analysis
-                  </h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Type:</span>
-                      <span className="font-medium text-slate-900 dark:text-white">{transaction.type}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Method:</span>
-                      <span className="font-medium text-slate-900 dark:text-white">{transaction.method}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Section:</span>
-                      <span className="font-medium text-slate-900 dark:text-white">{transaction.section}</span>
-                    </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2 flex-wrap">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                      Transaction Summary
+                    </h2>
+                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getTransactionTypeColor(transaction.type)}`}>
+                      {transaction.type}
+                    </span>
+                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-semibold">
+                      Block #{transaction.blockNumber}
+                    </span>
                   </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    💡 What Happened
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm">
+                  <p className="text-lg text-gray-600 dark:text-gray-300 mb-4">
                     {transaction.explanation}
                   </p>
+                  
+                  {/* Detailed Explanation */}
+                  <div className="p-4 bg-blue-50/80 dark:bg-blue-900/20 rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-white text-xs">💡</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">What Happened</h4>
+                        <p className="text-blue-800 dark:text-blue-200 text-sm leading-relaxed">
+                          This transaction executed a {transaction.method} call in the {transaction.section} module, transferring {transaction.amount} {transaction.token} from one account to another. The transaction was successfully included in block #{transaction.blockNumber} and cost {transaction.fee} {transaction.token} in fees.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    Transaction Details
-                  </h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Amount:</span>
-                      <span className="font-medium text-slate-900 dark:text-white">{transaction.amount} {transaction.token}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Fee:</span>
-                      <span className="font-medium text-slate-900 dark:text-white">{transaction.fee} {transaction.token}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Status:</span>
-                      <span className="font-medium text-green-600 dark:text-green-400 capitalize">{transaction.status}</span>
-                    </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
+                <button
+                  onClick={() => copyToClipboard(transaction.hash, 'hash')}
+                  className="flex items-center gap-2 px-4 py-2.5 bg-slate-100/80 dark:bg-slate-700/80 hover:bg-slate-200/80 dark:hover:bg-slate-600/80 text-slate-700 dark:text-slate-300 rounded-xl transition-all duration-200 hover:shadow-md"
+                >
+                  <Copy className="w-4 h-4" />
+                  {copied === 'hash' ? 'Copied!' : 'Copy Hash'}
+                </button>
+                <button
+                  onClick={() => copyToClipboard(transaction.from, 'from')}
+                  className="flex items-center gap-2 px-4 py-2.5 bg-slate-100/80 dark:bg-slate-700/80 hover:bg-slate-200/80 dark:hover:bg-slate-600/80 text-slate-700 dark:text-slate-300 rounded-xl transition-all duration-200 hover:shadow-md"
+                >
+                  <Copy className="w-4 h-4" />
+                  {copied === 'from' ? 'Copied!' : 'Copy From'}
+                </button>
+                <button className="flex items-center gap-2 px-4 py-2.5 bg-blue-100/80 dark:bg-blue-900/30 hover:bg-blue-200/80 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-xl transition-all duration-200 hover:shadow-md">
+                  <Download className="w-4 h-4" />
+                  Export JSON
+                </button>
+                <button className="flex items-center gap-2 px-4 py-2.5 bg-green-100/80 dark:bg-green-900/30 hover:bg-green-200/80 dark:hover:bg-green-900/50 text-green-700 dark:text-green-300 rounded-xl transition-all duration-200 hover:shadow-md">
+                  <Download className="w-4 h-4" />
+                  Export CSV
+                </button>
+                <button className="flex items-center gap-2 px-4 py-2.5 bg-purple-100/80 dark:bg-purple-900/30 hover:bg-purple-200/80 dark:hover:bg-purple-900/50 text-purple-700 dark:text-purple-300 rounded-xl transition-all duration-200 hover:shadow-md">
+                  <Share2 className="w-4 h-4" />
+                  Share
+                </button>
+                <a
+                  href={`https://polkadot.subscan.io/extrinsic/${transaction.hash}`}
+          target="_blank"
+          rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-indigo-100/80 dark:bg-indigo-900/30 hover:bg-indigo-200/80 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded-xl transition-all duration-200 hover:shadow-md"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  View on Subscan
+                </a>
+              </div>
+
+              {/* Basic Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <div className="flex items-center gap-3 p-4 bg-slate-50/80 dark:bg-slate-700/50 rounded-xl border border-slate-200/50 dark:border-slate-600/50">
+                  <div className="w-5 h-5 text-blue-500">👤</div>
+                  <div className="flex-1">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">From</p>
+                    <p className="font-mono text-sm text-slate-900 dark:text-white">
+                      {transaction.from.slice(0, 8)}...{transaction.from.slice(-6)}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => copyToClipboard(transaction.from, 'from-addr')}
+                    className="p-2 hover:bg-slate-200/80 dark:hover:bg-slate-600/80 rounded-lg transition-colors"
+                    title="Copy full address"
+                  >
+                    <Copy className="w-4 h-4 text-slate-500" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-3 p-4 bg-slate-50/80 dark:bg-slate-700/50 rounded-xl border border-slate-200/50 dark:border-slate-600/50">
+                  <div className="w-5 h-5 text-blue-500">👤</div>
+                  <div className="flex-1">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">To</p>
+                    <p className="font-mono text-sm text-slate-900 dark:text-white">
+                      {transaction.to.slice(0, 8)}...{transaction.to.slice(-6)}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => copyToClipboard(transaction.to, 'to-addr')}
+                    className="p-2 hover:bg-slate-200/80 dark:hover:bg-slate-600/80 rounded-lg transition-colors"
+                    title="Copy full address"
+                  >
+                    <Copy className="w-4 h-4 text-slate-500" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Transaction Flow */}
+            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-slate-200/50 dark:border-slate-700/50">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                🔄 Transaction Flow
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">1</div>
+                  <div>
+                    <h4 className="font-semibold text-slate-900 dark:text-white">Transaction Initiation</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">User initiates transaction with wallet signature</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-green-50/80 to-emerald-50/80 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border border-green-200/50 dark:border-green-800/50">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">2</div>
+                  <div>
+                    <h4 className="font-semibold text-slate-900 dark:text-white">Network Validation</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Polkadot network validates transaction and checks balance</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-50/80 to-pink-50/80 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl border border-purple-200/50 dark:border-purple-800/50">
+                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">3</div>
+                  <div>
+                    <h4 className="font-semibold text-slate-900 dark:text-white">Block Inclusion</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Validator includes transaction in block and executes</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-orange-50/80 to-red-50/80 dark:from-orange-900/20 dark:to-red-900/20 rounded-2xl border border-orange-200/50 dark:border-orange-800/50">
+                  <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold">4</div>
+                  <div>
+                    <h4 className="font-semibold text-slate-900 dark:text-white">Finalization</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Transaction is finalized and state changes are applied</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Educational Content */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                📚 Educational Content
+            {/* Events */}
+            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-slate-200/50 dark:border-slate-700/50">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">
+                📋 Events ({transaction.events.length})
               </h3>
               <div className="space-y-3">
-                {transaction.educationalContent.map((content: string, index: number) => (
-                  <p key={index} className="text-slate-600 dark:text-slate-400 text-sm">
-                    {content}
-                  </p>
+                {transaction.events.map((event: any, idx: number) => (
+                  <div key={idx} className="flex items-center gap-3 p-4 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200/50 dark:border-blue-800/50 hover:shadow-lg transition-all duration-300 hover:scale-105">
+                    <div className="p-2 bg-blue-500 rounded-lg text-white">
+                      <span className="text-sm">📤</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-slate-900 dark:text-white">
+                        {event.type}
+                      </p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        {event.from && event.to ? `From: ${event.from.slice(0, 8)}...${event.from.slice(-6)} → To: ${event.to.slice(0, 8)}...${event.to.slice(-6)}` : event.amount}
+                      </p>
+                    </div>
+                  </div>
                 ))}
               </div>
+            </div>
+
+            {/* Gas & Fee Analysis */}
+            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-slate-200/50 dark:border-slate-700/50">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                  💰 Gas & Fee Analysis
+                </h3>
+                <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm font-semibold">
+                  Low Cost
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="p-4 bg-yellow-50/80 dark:bg-yellow-900/20 rounded-2xl border border-yellow-200/50 dark:border-yellow-800/50">
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Transaction Fee</p>
+                  <p className="text-lg font-bold text-slate-900 dark:text-white">
+                    {transaction.fee} {transaction.token}
+                  </p>
+                </div>
+                <div className="p-4 bg-blue-50/80 dark:bg-blue-900/20 rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Amount Transferred</p>
+                  <p className="text-lg font-bold text-slate-900 dark:text-white">
+                    {transaction.amount} {transaction.token}
+                  </p>
+                </div>
+                <div className="p-4 bg-green-50/80 dark:bg-green-900/20 rounded-2xl border border-green-200/50 dark:border-green-800/50">
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Fee Percentage</p>
+                  <p className="text-lg font-bold text-slate-900 dark:text-white">
+                    {((parseFloat(transaction.fee) / parseFloat(transaction.amount)) * 100).toFixed(2)}%
+                  </p>
+                </div>
+                <div className="p-4 bg-purple-50/80 dark:bg-purple-900/20 rounded-2xl border border-purple-200/50 dark:border-purple-800/50">
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Network</p>
+                  <p className="text-lg font-bold text-slate-900 dark:text-white">
+                    Polkadot
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Educational Content */}
+            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-slate-200/50 dark:border-slate-700/50">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                📚 Educational Content
+              </h3>
+              <div className="space-y-4">
+                {transaction.educationalContent.map((content: string, index: number) => (
+                  <div key={index} className="p-4 bg-blue-50/80 dark:bg-blue-900/20 rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
+                    <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                      {content}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Transaction Hash */}
+            <div className="bg-slate-50/80 dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-200/50 dark:border-slate-700/50">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm text-slate-500 dark:text-slate-400">Transaction Hash</p>
+                <button
+                  onClick={() => copyToClipboard(transaction.hash, 'hash-full')}
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs bg-white/80 dark:bg-slate-800/80 hover:bg-slate-100/80 dark:hover:bg-slate-700/80 rounded-lg transition-colors"
+                >
+                  <Copy className="w-3 h-3" />
+                  Copy
+                </button>
+              </div>
+              <p className="font-mono text-sm text-slate-900 dark:text-white break-all">
+                {transaction.hash}
+              </p>
             </div>
           </div>
         )}
@@ -447,8 +586,8 @@ export default function Home() {
               </div>
               <a 
                 href="https://twitter.com/Panagot" 
-                target="_blank" 
-                rel="noopener noreferrer"
+          target="_blank"
+          rel="noopener noreferrer"
                 className="text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
                 title="Follow @Panagot on Twitter"
               >
