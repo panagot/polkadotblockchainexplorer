@@ -4,12 +4,36 @@ import { useState, useEffect } from 'react';
 import { Search, Loader2, Moon, Sun, History, TrendingUp, Copy, Download, Share2, ExternalLink, XCircle, Check } from 'lucide-react';
 import Image from 'next/image';
 
+interface TransactionEvent {
+  type: string;
+  from?: string;
+  to?: string;
+  amount?: string;
+}
+
+interface Transaction {
+  hash: string;
+  from: string;
+  to: string;
+  type: string;
+  method: string;
+  section: string;
+  explanation: string;
+  blockNumber: number;
+  amount: string;
+  fee: string;
+  token: string;
+  status: string;
+  events: TransactionEvent[];
+  educationalContent: string[];
+}
+
 export default function Home() {
   const [hash, setHash] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [transaction, setTransaction] = useState<any>(null);
-  const [history, setHistory] = useState<any[]>([]);
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
+  const [history, setHistory] = useState<Transaction[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
@@ -46,21 +70,17 @@ export default function Home() {
   useEffect(() => {
     // Only run after component is mounted
     if (mounted && typeof window !== 'undefined') {
-      console.log('Dark mode effect running:', { darkMode, mounted });
       if (darkMode) {
         document.documentElement.classList.add('dark');
         localStorage.setItem('polkadot-dark-mode', 'true');
-        console.log('Added dark class to html element');
       } else {
         document.documentElement.classList.remove('dark');
         localStorage.setItem('polkadot-dark-mode', 'false');
-        console.log('Removed dark class from html element');
       }
     }
   }, [darkMode, mounted]);
 
   const toggleDarkMode = () => {
-    console.log('Toggling dark mode from:', darkMode, 'to:', !darkMode);
     setDarkMode(!darkMode);
   };
 
@@ -510,7 +530,7 @@ export default function Home() {
                 📋 Events ({transaction.events.length})
               </h3>
               <div className="space-y-3">
-                {transaction.events.map((event: any, idx: number) => (
+                {transaction.events.map((event: TransactionEvent, idx: number) => (
                   <div key={idx} className="flex items-center gap-3 p-4 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200/50 dark:border-blue-800/50 hover:shadow-lg transition-all duration-300 hover:scale-105">
                     <div className="p-2 bg-blue-500 rounded-lg text-white">
                       <span className="text-sm">📤</span>
