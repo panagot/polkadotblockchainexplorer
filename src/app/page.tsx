@@ -29,31 +29,38 @@ export default function Home() {
         }
       }
 
+      // Initialize dark mode from localStorage
       const savedDarkMode = localStorage.getItem('polkadot-dark-mode');
-      if (savedDarkMode === 'true') {
-        setDarkMode(true);
+      const isDark = savedDarkMode === 'true';
+      setDarkMode(isDark);
+      
+      // Apply dark class to html element
+      if (isDark) {
         document.documentElement.classList.add('dark');
       } else {
-        setDarkMode(false);
         document.documentElement.classList.remove('dark');
       }
     }
   }, []);
 
   useEffect(() => {
-    // Check if we're in the browser and component is mounted
-    if (typeof window !== 'undefined' && mounted) {
+    // Only run after component is mounted
+    if (mounted && typeof window !== 'undefined') {
+      console.log('Dark mode effect running:', { darkMode, mounted });
       if (darkMode) {
         document.documentElement.classList.add('dark');
         localStorage.setItem('polkadot-dark-mode', 'true');
+        console.log('Added dark class to html element');
       } else {
         document.documentElement.classList.remove('dark');
         localStorage.setItem('polkadot-dark-mode', 'false');
+        console.log('Removed dark class from html element');
       }
     }
   }, [darkMode, mounted]);
 
   const toggleDarkMode = () => {
+    console.log('Toggling dark mode from:', darkMode, 'to:', !darkMode);
     setDarkMode(!darkMode);
   };
 
