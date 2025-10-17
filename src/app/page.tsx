@@ -59,8 +59,10 @@ export default function Home() {
       // Apply dark class to html element immediately
       if (isDark) {
         document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
       }
       
       // Set state after DOM manipulation
@@ -74,9 +76,11 @@ export default function Home() {
     if (mounted && typeof window !== 'undefined') {
       if (darkMode) {
         document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
         localStorage.setItem('polkadot-dark-mode', 'true');
       } else {
         document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
         localStorage.setItem('polkadot-dark-mode', 'false');
       }
     }
