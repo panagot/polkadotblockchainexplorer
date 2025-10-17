@@ -24,21 +24,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                const savedDarkMode = localStorage.getItem('polkadot-dark-mode');
-                if (savedDarkMode === 'true') {
-                  document.documentElement.classList.add('dark');
-                  document.body.classList.add('dark');
-                }
-              } catch (e) {}
-            `,
-          }}
-        />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

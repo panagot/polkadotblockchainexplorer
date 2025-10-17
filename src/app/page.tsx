@@ -39,6 +39,7 @@ export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
+  const [forceRender, setForceRender] = useState(0);
 
   useEffect(() => {
     // Check if we're in the browser
@@ -93,18 +94,49 @@ export default function Home() {
     const newDarkMode = !darkMode;
     console.log('Setting darkMode to:', newDarkMode);
     
-    // Apply changes immediately
+    // Force dark mode with multiple approaches
     if (newDarkMode) {
+      // Method 1: Add dark class to html and body
       document.documentElement.classList.add('dark');
       document.body.classList.add('dark');
+      
+      // Method 2: Set data attribute
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.body.setAttribute('data-theme', 'dark');
+      
+      // Method 3: Force with style attribute as backup
+      document.documentElement.style.setProperty('--dark-mode', '1');
+      
       localStorage.setItem('polkadot-dark-mode', 'true');
+      console.log('Applied dark mode - classes added');
     } else {
+      // Method 1: Remove dark class from html and body
       document.documentElement.classList.remove('dark');
       document.body.classList.remove('dark');
+      
+      // Method 2: Remove data attribute
+      document.documentElement.removeAttribute('data-theme');
+      document.body.removeAttribute('data-theme');
+      
+      // Method 3: Remove style property
+      document.documentElement.style.removeProperty('--dark-mode');
+      
       localStorage.setItem('polkadot-dark-mode', 'false');
+      console.log('Applied light mode - classes removed');
     }
     
     setDarkMode(newDarkMode);
+    
+    // Force a re-render
+    setForceRender(prev => prev + 1);
+    
+    // Debug logging
+    setTimeout(() => {
+      console.log('Current html classes:', document.documentElement.className);
+      console.log('Current body classes:', document.body.className);
+      console.log('Current html data-theme:', document.documentElement.getAttribute('data-theme'));
+      console.log('Current body data-theme:', document.body.getAttribute('data-theme'));
+    }, 100);
   };
 
   const copyToClipboard = async (text: string, type: string) => {
@@ -207,7 +239,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex flex-col">
+    <main key={forceRender} className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex flex-col">
       {/* Build: 2025-01-17-POLKADOT */}
       {/* Debug: Dark Mode Status */}
       <div className="fixed top-0 right-0 z-50 p-2 bg-red-500 text-white text-xs">
